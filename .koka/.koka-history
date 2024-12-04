@@ -1,0 +1,5 @@
+fun sort(l: list<a>) {}
+fun sort(l: list<a>)
+fun sort(l)
+fun sort(l) {return l}
+:quit

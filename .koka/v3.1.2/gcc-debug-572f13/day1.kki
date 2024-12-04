@@ -1,0 +1,107 @@
+module interface day1
+ 
+//------------------------------
+//#kki: import declarations
+ 
+import std/core/types = std/core/types pub = "";
+import std/core/hnd = std/core/hnd pub = "";
+import std/core/exn = std/core/exn pub = "";
+import std/core/bool = std/core/bool pub = "";
+import std/core/order = std/core/order pub = "";
+import std/core/char = std/core/char pub = "";
+import std/core/int = std/core/int pub = "";
+import std/core/vector = std/core/vector pub = "";
+import std/core/string = std/core/string pub = "";
+import std/core/sslice = std/core/sslice pub = "";
+import std/core/list = std/core/list pub = "";
+import std/core/maybe = std/core/maybe pub = "";
+import std/core/either = std/core/either pub = "";
+import std/core/tuple = std/core/tuple pub = "";
+import std/core/show = std/core/show pub = "";
+import std/core/debug = std/core/debug pub = "";
+import std/core/delayed = std/core/delayed pub = "";
+import std/core/console = std/core/console pub = "";
+import std/core = std/core = "";
+ 
+//------------------------------
+//#kki: external imports
+ 
+ 
+//------------------------------
+//#kki: fixity declarations
+ 
+ 
+//------------------------------
+//#kki: local imported aliases
+ 
+ 
+//------------------------------
+//#kki: type declarations
+ 
+ 
+//------------------------------
+//#kki: declarations
+ 
+pub  fun min[1,5,1,7] : (xs : (std/core/types/list :: V -> V)<std/core/types/int>) -> (std/core/types/maybe :: V -> V)<std/core/types/int>;
+// monadic lift
+ fun @mlift-partition_h@10014[1,0,1,0] : forall<a,(e :: E)> (aux1 : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>, aux2 : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>, pred : (a) -> (e :: E) std/core/types/bool, x : a, xs@0 : (std/core/types/list :: V -> V)<a>, @y-x10009 : std/core/types/bool) -> (e :: E) ((std/core/types/list :: V -> V)<a>, (std/core/types/list :: V -> V)<a>);
+pub  fun partition_h[9,5,9,15] : forall<a,(e :: E)> (xs : (std/core/types/list :: V -> V)<a>, pred : (a) -> (e :: E) std/core/types/bool, aux1 : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>, aux2 : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>) -> (e :: E) ((std/core/types/list :: V -> V)<a>, (std/core/types/list :: V -> V)<a>);
+pub  fun sort[17,5,17,8] : forall<a> (xs : a) -> a;
+pub  fun main[20,5,20,8] : () -> <(std/core/console/console :: X)> ();
+ 
+//------------------------------
+//#kki: external declarations
+ 
+ 
+//------------------------------
+//#kki: inline definitions
+ 
+//.inline-section
+recursive specialize "_*__"  fun partition_h // inline size: 18
+  = forall<a,(e :: E)> fn<(e :: E)>(xs: (std/core/types/list :: V -> V)<a>, pred: (a) -> (e :: E) std/core/types/bool, aux1: (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>, aux2: (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>){
+    (match (xs) {
+      ((std/core/types/Nil() : (std/core/types/list :: V -> V)<a> ) as @pat@3: ((std/core/types/list :: V -> V)<a>))
+         -> std/core/types/Tuple2<(std/core/types/list :: V -> V)<a>,(std/core/types/list :: V -> V)<a>>((match (aux1) {
+            ((std/core/types/@Optional((@uniq-aux1@100: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+               -> @uniq-aux1@100;
+            ((@skip std/core/types/@None() : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@0: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+               -> std/core/types/Nil<a>;
+          }), (match (aux2) {
+            ((std/core/types/@Optional((@uniq-aux2@106: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@1: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+               -> @uniq-aux2@106;
+            ((@skip std/core/types/@None() : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@2: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+               -> std/core/types/Nil<a>;
+          }));
+      ((@skip std/core/types/Cons((x: a) : a, (xs@0: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a> ) as @pat@4: ((std/core/types/list :: V -> V)<a>))
+         -> (match ((pred(x))) {
+          ((std/core/types/True() : std/core/types/bool ) as @pat@5: std/core/types/bool)
+             -> day1/partition_h<a,(e :: E)>(xs@0, pred, (std/core/types/@Optional<(std/core/types/list :: V -> V)<a>>((std/core/types/Cons<a>(x, (match (aux1) {
+                  ((std/core/types/@Optional((@uniq-aux1@100: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                     -> @uniq-aux1@100;
+                  ((@skip std/core/types/@None() : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@0: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                     -> std/core/types/Nil<a>;
+                }))))), (std/core/types/@Optional<(std/core/types/list :: V -> V)<a>>((match (aux2) {
+                ((std/core/types/@Optional((@uniq-aux2@106: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@1: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                   -> @uniq-aux2@106;
+                ((@skip std/core/types/@None() : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@2: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                   -> std/core/types/Nil<a>;
+              }))));
+          ((@skip std/core/types/False() : std/core/types/bool ) as @pat@6: std/core/types/bool)
+             -> day1/partition_h<a,(e :: E)>(xs@0, pred, (std/core/types/@Optional<(std/core/types/list :: V -> V)<a>>((match (aux1) {
+                ((std/core/types/@Optional((@uniq-aux1@100: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                   -> @uniq-aux1@100;
+                ((@skip std/core/types/@None() : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@0: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                   -> std/core/types/Nil<a>;
+              }))), (std/core/types/@Optional<(std/core/types/list :: V -> V)<a>>((std/core/types/Cons<a>(x, (match (aux2) {
+                  ((std/core/types/@Optional((@uniq-aux2@106: (std/core/types/list :: V -> V)<a>) : (std/core/types/list :: V -> V)<a>) : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@1: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                     -> @uniq-aux2@106;
+                  ((@skip std/core/types/@None() : (std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>> ) as @pat@2: ((std/core/types/@optional :: V -> V)<(std/core/types/list :: V -> V)<a>>))
+                     -> std/core/types/Nil<a>;
+                }))))));
+        });
+    });
+  };
+inline  fun sort // inline size: 0
+  = forall<a> fn(xs: a){
+    xs;
+  };
