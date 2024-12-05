@@ -1,7 +1,3 @@
-import std/os/env
-import std/os/path
-import std/os/file
-
 fun aoc/min(xs : list<int>) : maybe<int>
   match xs
     Nil -> Nothing
@@ -63,35 +59,3 @@ fun aoc/filter-when(xs : list<a>, pred : a -> e bool): e list<a>
 
 fun aoc/filter(xs : list<a>, y : a, ?(==) : (a, a) -> bool) : list<a>
   xs.filter-when fn(e) e == y
-
-fun to-pair(xx : list<a>) : maybe<(a, a)>
-  match xx
-    Cons(x, Cons(y, Nil)) -> Just((x, y))
-    _ -> Nothing
-
-fun str/split(s : string, sep : char)
-  s.list.split-when (fn(x) x == sep).map(listchar/string)
-  
-fun pair/map(p : (a, a), f : a -> e b) : e (b, b)
-  val (x, y) = p
-  (f(x), f(y))
-
-fun pairlist/zip(p)
-  val (a, b) = p
-  aoc/zip(a, b)
-
-fun main()
-  val args = get-args()[0].unjust.path
-  val file = read-text-file(args)
-  fun keep-ints(s) str/split(s, ' ').filter("")
-  fun make-int-pairs(l) list/map(l, fn(s) s.parse-int.unjust).to-pair.unjust
-  val int-pairs = file
-      .str/split('\n')
-      .map (keep-ints)
-      .filter([])
-      .map (make-int-pairs)
-  int-pairs.println
-  fun diff((x, y)) abs(x - y)
-  val sorted = int-pairs.aoc/unzip.pair/map(fn (l) l.qsort).zip
-  sorted.map(diff).sum
-

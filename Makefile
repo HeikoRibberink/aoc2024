@@ -1,11 +1,15 @@
-F = 
+dir = 
 in = 
+ex = main1
+srcs != find -iname "*.kk"
 
-%: %.kk
+.PHONY: watch
+
+%: %.kk $(srcs)
 	koka -o $@ $<
 	chmod +x ./$@
-	./$@ $(in)
+	./$@ $(dir)/$(in)
 
 watch:
-	echo '$(F).kk' | entr make $(F)
+	echo '$(dir)/$(ex).kk' | entr make $(dir)/$(ex)
 
