@@ -66,3 +66,15 @@ fun lst/filter-when(xs : list<a>, pred : a -> e bool): e list<a>
 
 fun lst/filter(xs : list<a>, y : a, ?(==) : (a, a) -> bool) : list<a>
   xs.filter-when fn(e) e == y
+
+// Let `xs` be `a0, a1, a2, ..., a(n-1) an`,
+// then `windowed(xs)` is `(a0, a1), (a1, a2), ..., (a(n-1), an)`.
+fun lst/windowed(xs : list<a>) : div list<(a, a)>
+  match xs
+    Cons(a, Cons(b, xs)) -> Cons((a, b), windowed(Cons(b, xs)))
+    _ -> Nil
+
+fun lst/all-equal(xs: list<a>, ?(==) : (a, a) -> bool)
+  xs.windowed.map fn((a, b))
+    a == b
+  .foldl1((&&))
