@@ -98,3 +98,9 @@ fun take-every(xs : list<a>, n : int, start : int = 1) : list<a>
       else
         xs.take-every(n, start + 1)
   
+
+fip fun with-index(xs : list<a>, i : int = 0) : list<(int, a)>
+  match xs
+    Nil -> Nil
+    Cons(x, xs) ->
+      Cons((i, x), xs.with-index(i + 1))
