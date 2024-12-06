@@ -3,13 +3,16 @@ in =
 ex = main1
 srcs != find -iname "*.kk"
 
-.PHONY: watch
 
 %: %.kk $(srcs)
 	koka -o $@ $<
-	chmod +x ./$@
-	./$@ $(dir)/$(in)
 
+.PHONY: watch
 watch:
-	echo '$(dir)/$(ex).kk' | entr make $(dir)/$(ex)
+	find -iname "*.kk" | entr make run
+
+.PHONY: run
+run: $(dir)/$(ex)
+	chmod +x ./$<
+	./$< $(dir)/$(in)
 

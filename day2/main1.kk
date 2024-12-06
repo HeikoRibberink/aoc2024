@@ -1,0 +1,8 @@
+import std/os/path
+import std/os/env
+import day2
+
+fun main()
+  val path = env/get-args()[0].unjust.path
+  val matrix = day2/parse(path)
+  matrix

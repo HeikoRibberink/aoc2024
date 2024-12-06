@@ -1,4 +1,4 @@
-import aoc
+import lst
 
 fun pair/map(p : (a, a), f : a -> e b) : e (b, b)
   val (x, y) = p
@@ -11,4 +11,4 @@ fun pair/to-pair(xx : list<a>) : maybe<(a, a)>
 
 fun pairlist/zip(p)
   val (a, b) = p
-  aoc/zip(a, b)
+  lst/zip(a, b)
