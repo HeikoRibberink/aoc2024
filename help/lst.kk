@@ -88,3 +88,13 @@ fun without(xs : list<a>, i : int) : list<a>
         xs
       else
         Cons(x, xs.without(i - 1))
+
+fun take-every(xs : list<a>, n : int, start : int = 1) : list<a>
+  match xs
+    Nil -> Nil
+    Cons(x, xs) ->
+      if start % n == 0 then
+        Cons(x, xs.take-every(n, start + 1))
+      else
+        xs.take-every(n, start + 1)
+  
