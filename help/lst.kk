@@ -78,3 +78,13 @@ fun lst/all-equal(xs: list<a>, ?(==) : (a, a) -> bool)
   xs.windowed.map fn((a, b))
     a == b
   .foldl1((&&))
+
+// Returns `xs` without the element at index `i`. If `i` is out of range, returns `xs`
+fun without(xs : list<a>, i : int) : list<a>
+  match xs
+    Nil -> Nil
+    Cons(x, xs) -> 
+      if i == 0 then
+        xs
+      else
+        Cons(x, xs.without(i - 1))
