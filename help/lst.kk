@@ -55,17 +55,20 @@ fun lst/split-when(xs : list<a>, pred : a -> e bool) : e list<list<a>>
             Cons(Cons(x, ys), yss)
         _ -> Nil
 
-fun lst/filter-when(xs : list<a>, pred : a -> e bool): e list<a>
+fun lst/filter-when(xs : list<a>, ^pred : a -> e bool) : e list<a>
   match xs
     Nil -> Nil
-    Cons(x, xs) ->
-      if pred(x) then
-        xs.filter-when(pred)
-      else
-        Cons(x, xs.filter-when(pred))
+    Cons(x, xs) -> if pred(x) then 
+      xs.filter-when(pred) 
+    else
+      Cons(x, xs.filter-when(pred))
 
 fun lst/filter(xs : list<a>, y : a, ?(==) : (a, a) -> bool) : list<a>
   xs.filter-when fn(e) e == y
+
+fun lst/keep-when(xs : list<a>, ^pred : a -> e bool) : e list<a>
+  xs.filter-when fn(a)
+    not(pred(a))
 
 // Let `xs` be `a0, a1, a2, ..., a(n-1) an`,
 // then `windowed(xs)` is `(a0, a1), (a1, a2), ..., (a(n-1), an)`.
@@ -104,3 +107,10 @@ fip fun with-index(xs : list<a>, i : int = 0) : list<(int, a)>
     Nil -> Nil
     Cons(x, xs) ->
       Cons((i, x), xs.with-index(i + 1))
+
+fbip fun contains(xs : list<a>, ex : a, ^?(==) : (a, a) -> bool) : bool
+  match xs
+    Cons(x, _) | ex == x -> True
+    Cons(_, xs) -> xs.contains(ex)
+    _ -> False
+
