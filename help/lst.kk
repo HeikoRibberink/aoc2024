@@ -64,7 +64,10 @@ fun lst/filter-when(xs : list<a>, ^pred : a -> e bool) : e list<a>
       Cons(x, xs.filter-when(pred))
 
 fun lst/filter(xs : list<a>, y : a, ?(==) : (a, a) -> bool) : list<a>
-  xs.filter-when fn(e) e == y
+  match xs
+    Nil -> Nil
+    Cons(x, xs) | x == y -> xs.filter(y)
+    Cons(x, xs) -> Cons(x, xs.filter(y))
 
 fun lst/keep-when(xs : list<a>, ^pred : a -> e bool) : e list<a>
   xs.filter-when fn(a)
