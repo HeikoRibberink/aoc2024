@@ -117,3 +117,11 @@ fbip fun contains(xs : list<a>, ex : a, ^?(==) : (a, a) -> bool) : bool
     Cons(_, xs) -> xs.contains(ex)
     _ -> False
 
+fbip fun index-of(xs : list<a>, ^pred : a -> e bool, n : int = 0) : e maybe<int>
+  match xs
+    Nil -> Nothing
+    Cons(x, xs) -> 
+      if pred(x) then
+        Just(n) 
+      else 
+        xs.index-of(pred, n + 1)
