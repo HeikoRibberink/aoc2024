@@ -16,16 +16,32 @@ fun split-rule(str : string)
   .to-pair
   .expect("each list to be two elements")
 
-fun check-rule(update : list<int>, rule : (int, int)) : bool
+fun get-indices(update : list<int>, rule : (int, int)) : maybe<(int, int)>
   update.lst/index-of fn(x)
     x == rule.fst
   .maybe/map fn(x)
     update.lst/index-of fn(y)
       y == rule.snd
     .map fn(y)
-      x < y
+      (x, y)
   .flatten
+
+fun check-rule(update : list<int>, rule : (int, int)) : bool
+  update.get-indices(rule).map fn((x, y))
+    x < y
   .default(True)
+
+fun check-rules(update, rules)
+  rules
+  .map fn(rule)
+    update
+    .check-rule(rule)
+  .foldl1((&&))
+
+fun reorder(update : list<int>, rule : (int, int)) : _ list<int>
+  match update.get-indices(rule)
+    Just((i, j)) | i > j -> update.swap(i, j).unjust
+    _ -> update
   
 fun main()
   val text = aoc/input()
@@ -45,16 +61,18 @@ fun main()
       .map fn(s)
         s.parse-int.unjust
 
+
   updates
   .map fn(update)
-    if (rules.map fn(rule)
-          update.check-rule(rule)
-        .foldl1((&&))
-        ) 
-    then
-      update[update.length / 2]
-    else
+    if check-rules(update, rules) then
       Nothing
-  .filter(Nothing)
-  .map(unjust)
+    else
+      var update := update
+      while{ !check-rules(update, rules) }
+        update := rules.foldl(update) fn(update, rule)
+          update.reorder(rule)
+      update[update.length / 2]
+  .map fn(m)
+    m.maybe/default(0)
   .sum
+

@@ -1,3 +1,5 @@
+import help/maybe
+
 fun lst/min(xs : list<int>) : maybe<int>
   match xs
     Nil -> Nothing
@@ -125,3 +127,17 @@ fbip fun index-of(xs : list<a>, ^pred : a -> e bool, n : int = 0) : e maybe<int>
         Just(n) 
       else 
         xs.index-of(pred, n + 1)
+
+fbip fun set(xs : list<a>, i : int, new : a) : _ list<a>
+  match (xs, i)
+    (Nil, _) -> Nil
+    (Cons(_, xs), 0) -> Cons(new, xs)
+    (Cons(x, xs), i) -> Cons(x, xs.set(i - 1, new))
+
+fun swap(xs : list<a>, i : int, j : int) : _ maybe<list<a>>
+  xs[i].map fn(a)
+    xs[j].map fn(b)
+      xs
+      .set(i, b)
+      .set(j, a)
+  .flatten
