@@ -3,14 +3,12 @@ effect counter
   fun get() : int
 
 fun counter(s : int, action : () -> <counter|e> a) : e a
-  var i := s - 1
+  var i := s
   with handler 
     fun increment()
+      val temp = i
       i := i + 1
-      i
+      temp
     fun get() 
-      val i1 = i
-      i1
-
+      i
   action()
-

@@ -1,14 +1,18 @@
 import maybe
 import util
+import lst
 
 alias idx = (int, int)
 
 alias matrix<a> = vector<vector<a>>
 
 fun matrix/@index(^mat : matrix<a>, cs : (int, int)) : maybe<a>
-  with try-or-maybe
   val (i, j) = cs
-  mat[i][j]
+  if i < 0 || j < 0 then
+    Nothing
+  else
+    with try-or-maybe
+    mat[i][j]
 
 fun matrix/matrix-init(rows : int, cols : int, f : idx -> e a) : e matrix<a>
   vector-init(rows) fn(i)
@@ -18,11 +22,21 @@ fun matrix/matrix-init(rows : int, cols : int, f : idx -> e a) : e matrix<a>
 fun matrix/size(mat : matrix<a>) : exn (int, int)
   (mat.length, mat[0].length)
 
+fun matrix/set(^mat : matrix<a>, idx : idx, new : a) : _ matrix<a>
+  val (rows, cols) = mat.size
+  vector-init(rows) fn(i)
+    vector-init(cols) fn(j)
+      if (i, j) == idx then
+        new
+      else
+        mat[(i, j)].expect("Index " ++ (i, j).show ++ " out of bounds.")
+
 // Create a `matrix<char>` from `text`, consisting of multiple lines.
 fun charmatrix/parse(text : string) : matrix<char>
   text
   .lines
   .map(list)
+  .lst/filter([])
   .map(vector)
   .vector
 

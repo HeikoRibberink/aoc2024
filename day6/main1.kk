@@ -4,17 +4,8 @@ import help/util
 import help/lst
 import help/dir
 import help/pair
+import day6
 
-alias pos = (int, int)
-
-type tile
-  Empty
-  Obstructed
-
-fun tile/show(t)
-  match t
-    Empty -> "."
-    Obstructed -> "#"
 
 effect board
   ctl facing() : tile
@@ -22,21 +13,6 @@ effect board
   fun rotate() : ()
   fun mark() : ()
 
-fun parse-state(text : string) : _ (pos, matrix<tile>)
-  var player := Nothing
-  val mat = 
-    text
-    .charmatrix/parse
-    .matrix/map-lexical-indexed fn(pos, elem)
-        match elem
-          '.' -> Empty
-          '#' -> Obstructed
-          '^' ->
-            player := Just(pos)
-            Empty
-  val p = player.unjust
-  (p, mat)
-        
 fun walker(board : matrix<tile>, start : pos, action : () -> <board|e> ()) : e _
   var marked := Nil
   var pos : pos := start

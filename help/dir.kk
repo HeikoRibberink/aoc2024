@@ -25,3 +25,10 @@ fun direction/next(dir : direction) : direction
     East -> South
     South -> West
     West -> North
+
+fun direction/show(dir : direction) : string
+  match dir 
+    North -> "North"
+    East -> "East"
+    South -> "South"
+    West -> "West"
