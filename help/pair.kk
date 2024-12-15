@@ -12,3 +12,9 @@ fun pair/to-pair(xx : list<a>) : maybe<(a, a)>
 fun pairlist/zip(p)
   val (a, b) = p
   lst/zip(a, b)
+
+fun intpair/(+)(p1 : (int, int), p2 : (int, int)) : (int, int)
+  val (a1, b1) = p1
+  val (a2, b2) = p2
+  (a1 + a2, b1 + b2)
+

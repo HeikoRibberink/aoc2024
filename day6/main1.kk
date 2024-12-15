@@ -2,39 +2,10 @@ import help/aoc
 import help/matrix
 import help/util
 import help/lst
+import help/dir
+import help/pair
 
 alias pos = (int, int)
-
-fun tuple2/(+)((a1, b1) : pos, (a2, b2) : pos) : pos
-  (a1 + a2, b1 + b2)
-
-type direction
-  North
-  East
-  South
-  West
-
-fun direction/(==)(a : direction, b : direction) : bool
-  match (a, b)
-    (North, North) -> True
-    (East, East) -> True
-    (South, South) -> True
-    (West, West) -> True
-    _ -> False
-
-fun direction/delta(dir : direction) : pos
-  match dir
-    North -> (-1, 0)
-    East -> (0, 1)
-    South -> (1, 0)
-    West -> (0, -1)
-
-fun direction/next(dir : direction) : direction
-  match dir
-    North -> East
-    East -> South
-    South -> West
-    West -> North
 
 type tile
   Empty
@@ -96,7 +67,6 @@ fun main()
   with walker(board, start)
   while {True}
     val t = facing()
-    t.println
     mark()
     match t
       Obstructed -> 
