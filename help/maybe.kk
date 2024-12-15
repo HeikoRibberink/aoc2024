@@ -8,3 +8,8 @@ fun flatten(m: maybe<maybe<a>>) : maybe<a>
     Nothing -> Nothing
     Just(Nothing) -> Nothing
     Just(Just(x)) -> Just(x)
+
+// Handler that catches an expection, turning it into a `Nothing`.
+val try-or-maybe = handler
+  final ctl throw-exn(exn) Nothing
+  return(a) Just(a)
