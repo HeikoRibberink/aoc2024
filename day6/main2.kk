@@ -1,15 +1,14 @@
-import help/control
 import help/aoc
 import help/lst
 import help/dir
 import help/util
 import help/pair
-import help/mat
-import help/control
-import help/matrix
+import help/exit
+import help/bitset
+import lib/matrix
+import lib/debug
 import day6
 
-alias idx = (int, int)
 alias board = matrix<tile>
 
 value struct guard
@@ -19,42 +18,58 @@ value struct guard
 fun guard/(==)(a : guard, b : guard) : bool
   a.pos == b.pos && a.dir == b.dir
 
+fun guard/show(g : guard) : string
+  "Guard(" ++ g.pos.show ++ ", " ++ g.dir.show ++ ")"
+
+effect val dims : idx
+
+fun guard/int(g : guard)
+  g.dir.int * dims.i * dims.j + g.pos.i * dims.j + g.pos.j
+
+fun guard/cardinality()
+  dims.i * dims.j * 4
+
 effect ctl mark(guard : guard) : ()
 
 fun detect-mark-cycle(action) : _ bool
-  var path : list<guard> := Nil
+  val path = ref(bitset(guard/cardinality()))
   with ctl mark(guard : guard)
-    if path.contains(guard) then
+    if (!path).contains(guard) then
       // Cycle detected
+      println("Cycle detected")
       True
     else
-      path := Cons(guard, path)
+      path.insert(guard)
       resume(())
   action()
   False
 
 fun simulate-guard(board : board, guard : guard)
   var guard := guard
-  early-exit
-    while {True} 
-      val front = guard.pos + guard.dir.delta
-      match board[front].else-exit
-        Empty -> 
-          mark(guard)
-          guard := guard(pos = front)
-        Obstructed ->
-          guard := guard(dir = guard.dir.next)
-  guard
-      
+  with try
+  while {True} 
+    val front : idx = guard.pos + guard.dir.delta.idx
+    match board[front]
+      Empty -> 
+        mark(guard)
+        guard := guard(pos = front)
+      Obstructed ->
+        guard := guard(dir = guard.dir.next)
 
 fun main()
+  with counter(0)
   val text = aoc/input()
   val (guard, board) = parse-state(text)
-  board.map-lexical-indexed fn(idx, _)
-    val board = board.set(idx, Obstructed)
-    with detect-mark-cycle
-    simulate-guard(board, Guard(guard, North))
-    println("Calculate " ++ idx.show)
-  .show
-  
+  with val dims = Idx(board.rows, board.cols)
+  guard.println
+  board.foreach-indexed fn(idx, _)
+    idx.println
+    if idx != guard then
+      val board = board.set(idx, Obstructed)
+      val cycles = detect-mark-cycle
+        simulate-guard(board, Guard(guard, North))
+      if cycles then
+        increment().println
+        ()
+  get()
 

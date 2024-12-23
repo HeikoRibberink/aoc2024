@@ -32,3 +32,10 @@ fun dir/show(dir : dir) : string
     East -> "East"
     South -> "South"
     West -> "West"
+
+fun dir/int(dir : dir) : int
+  match dir
+    North -> 0
+    East -> 1
+    South -> 2
+    West -> 3

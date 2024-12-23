@@ -6,7 +6,7 @@ flags =
 
 
 %: %.kk $(srcs)
-	koka -O3 -o $@ $<
+	koka -o $@ $<
 
 .PHONY: watch
 watch:

@@ -1,6 +1,4 @@
-import help/matrix
-
-alias pos = (int, int)
+import lib/matrix
 
 type tile
   Empty
@@ -11,12 +9,13 @@ fun tile/show(t)
     Empty -> "."
     Obstructed -> "#"
 
-fun parse-state(text : string) : _ (pos, matrix<tile>)
+fun parse-state(text : string) : _ (idx, matrix<tile>)
   var player := Nothing
   val mat = 
     text
-    .charmatrix/parse
-    .matrix/map-lexical-indexed fn(pos, elem)
+    .charlistlist/parse
+    .unjust
+    .matrix/map-indexed fn(pos, elem)
         match elem
           '.' -> Empty
           '#' -> Obstructed
