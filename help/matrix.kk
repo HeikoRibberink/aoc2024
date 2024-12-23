@@ -47,6 +47,14 @@ fun matrix/show(mat : matrix<a>, ?show : a -> string) : string
     .vectorsep/join(" ")
   .vectorsep/join("\n")
 
+fun listlist/matrix(ll : list<list<a>>) : matrix<a>
+  ll
+  .map(vector)
+  .vector
+
+fun matrix/listlist(mat : matrix<a>) : list<list<a>>
+  mat.list.map(list)
+
 effect ctl found(i : int, j : int) : ()
 
 fun matrix/get-location(mat : matrix<a>, pred : a -> e bool) : e maybe<idx>

@@ -18,3 +18,5 @@ fun intpair/(+)(p1 : (int, int), p2 : (int, int)) : (int, int)
   val (a2, b2) = p2
   (a1 + a2, b1 + b2)
 
+fun intpair/int((i, j) : (int, int), width : int) : int
+  i * width + j

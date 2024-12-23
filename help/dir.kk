@@ -1,10 +1,10 @@
-type direction
+type dir
   North
   East
   South
   West
 
-fun direction/(==)(a : direction, b : direction) : bool
+fun dir/(==)(a : dir, b : dir) : bool
   match (a, b)
     (North, North) -> True
     (East, East) -> True
@@ -12,21 +12,21 @@ fun direction/(==)(a : direction, b : direction) : bool
     (West, West) -> True
     _ -> False
 
-fun direction/delta(dir : direction) : (int, int)
+fun dir/delta(dir : dir) : (int, int)
   match dir
     North -> (-1, 0)
     East -> (0, 1)
     South -> (1, 0)
     West -> (0, -1)
 
-fun direction/next(dir : direction) : direction
+fun dir/next(dir : dir) : dir
   match dir
     North -> East
     East -> South
     South -> West
     West -> North
 
-fun direction/show(dir : direction) : string
+fun dir/show(dir : dir) : string
   match dir 
     North -> "North"
     East -> "East"

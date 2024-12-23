@@ -16,7 +16,7 @@ effect board
 fun walker(board : matrix<tile>, start : pos, action : () -> <board|e> ()) : e _
   var marked := Nil
   var pos : pos := start
-  var dir : direction := North
+  var dir : dir := North
   with handler
     ctl facing()
       val p2 = pos + dir.delta

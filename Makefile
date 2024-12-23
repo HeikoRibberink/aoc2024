@@ -2,10 +2,11 @@ dir =
 in = 
 ex = main1
 srcs != find -iname "*.kk"
+flags =
 
 
 %: %.kk $(srcs)
-	koka -o $@ $<
+	koka -O3 -o $@ $<
 
 .PHONY: watch
 watch:

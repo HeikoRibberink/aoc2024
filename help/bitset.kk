@@ -1,0 +1,1 @@
+alias bitset = vector<bool>

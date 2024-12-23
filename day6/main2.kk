@@ -1,66 +1,60 @@
+import help/control
 import help/aoc
-import help/matrix
-import help/util
 import help/lst
 import help/dir
+import help/util
 import help/pair
-import help/maybe
+import help/mat
+import help/control
+import help/matrix
 import day6
 
-effect game
-  ctl mark() : ()
-  ctl facing() : tile
-  fun step() : ()
-  fun rotate() : ()
+alias idx = (int, int)
+alias board = matrix<tile>
 
-fun detect-cycle(board : matrix<tile>, start : idx, action : () -> _ ()) : _ bool
-  var dir := North
-  var pos := start
-  var marked := Nil
-  with handler
-    ctl mark()
-      val mark = (pos, dir)
-      if marked.contains(mark) then
-        True
-      else
-        marked := Cons(mark, marked)
-        resume(())
-    ctl facing()
-      val p2 = pos + dir.delta
-      val t = board[p2]
-      match t
-        Just(x) -> resume(x)
-        Nothing -> False
-    fun step()
-      pos := pos + dir.delta
-    fun rotate()
-      dir := dir.next
-    return(_) False
+value struct guard
+  pos : idx
+  dir : dir
+
+fun guard/(==)(a : guard, b : guard) : bool
+  a.pos == b.pos && a.dir == b.dir
+
+effect ctl mark(guard : guard) : ()
+
+fun detect-mark-cycle(action) : _ bool
+  var path : list<guard> := Nil
+  with ctl mark(guard : guard)
+    if path.contains(guard) then
+      // Cycle detected
+      True
+    else
+      path := Cons(guard, path)
+      resume(())
   action()
+  False
+
+fun simulate-guard(board : board, guard : guard)
+  var guard := guard
+  early-exit
+    while {True} 
+      val front = guard.pos + guard.dir.delta
+      match board[front].else-exit
+        Empty -> 
+          mark(guard)
+          guard := guard(pos = front)
+        Obstructed ->
+          guard := guard(dir = guard.dir.next)
+  guard
+      
 
 fun main()
   val text = aoc/input()
-  val (guard, board) = text.parse-state
-  with counter(0)
-  val positions = 
-    board.foreach-indexed fn(i, row)
-      row.foreach-indexed fn(j, _)
-        val idx = (i, j)
-        if idx != guard then
-          val cur-board = board.matrix/set(idx, Obstructed)
-          val cycle = 
-            with detect-cycle(cur-board, guard)
-            while {True}
-              mark()
-              match facing()
-                Obstructed ->
-                  rotate()
-                  step()
-                Empty -> 
-                  step()
-          if cycle then
-            increment()
-            ()
-        else
-          ()
-  positions.show
+  val (guard, board) = parse-state(text)
+  board.map-lexical-indexed fn(idx, _)
+    val board = board.set(idx, Obstructed)
+    with detect-mark-cycle
+    simulate-guard(board, Guard(guard, North))
+    println("Calculate " ++ idx.show)
+  .show
+  
+

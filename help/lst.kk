@@ -128,11 +128,17 @@ fbip fun index-of(xs : list<a>, ^pred : a -> e bool, n : int = 0) : e maybe<int>
       else 
         xs.index-of(pred, n + 1)
 
-fbip fun set(xs : list<a>, i : int, new : a) : _ list<a>
-  match (xs, i)
-    (Nil, _) -> Nil
-    (Cons(_, xs), 0) -> Cons(new, xs)
-    (Cons(x, xs), i) -> Cons(x, xs.set(i - 1, new))
+fip fun map-at(xs : list<a>, i : int, ^f : a -> e a) : e list<a>
+  match xs
+    xs | i < 0 -> xs
+    Nil -> Nil
+    Cons(x, xs) | i == 0 -> Cons(f(x), xs)
+    Cons(x, xs) -> Cons(x, xs.map-at(i - 1, f))
+
+fun set(xs : list<a>, i : int, new : a) : _ list<a>
+  fun const(_)
+    new
+  xs.map-at(i, const)
 
 fun swap(xs : list<a>, i : int, j : int) : _ maybe<list<a>>
   xs[i].map fn(a)

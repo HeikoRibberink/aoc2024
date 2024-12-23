@@ -12,3 +12,6 @@ fun counter(s : int, action : () -> <counter|e> a) : e a
     fun get() 
       i
   action()
+
+fun todo() : exn a
+  throw("TODO reached.")
