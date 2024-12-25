@@ -12,7 +12,6 @@ pub fun data/show(data : data)
   "Data" ++ (data.total, data.vals).show()
 
 pub fun parse-line(line : string) : _ data
-  line.println
   val [sum_text, vals_text] = line.split(": ")
   val vals = vals_text.split(" ").map fn(x)
     x.parse-int.expect("value to be an int")
