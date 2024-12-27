@@ -5,6 +5,8 @@ import help/exit
 import help/util
 import help/maybe
 
+import indexed
+
 // An index into a matrix
 pub value struct idx
   i : int
@@ -72,7 +74,7 @@ pub fun show(mat : matrix<a>, ?show : a -> e string) : e string
       Idx(_, _) ->
         total := total ++ str
   total
-  
+
 pub fun foreach-indexed(^mat : matrix<a>, ^f : (idx, a) -> _ ())
   mat.data.foreach-indexed fn(i, e)
     f(i.idx(mat.cols), e)
@@ -86,6 +88,14 @@ pub fun map-indexed(^mat : matrix<a>, ^f : (idx, a) -> e b) : e matrix<b>
       mask<local<_>>
         f(idx, e)
   Matrix(mat.rows, mat.cols, new-data)
+
+pub fun find-all(^mat : matrix<a>, ^f : a -> _ bool) : _ list<a>
+  var res := Nil
+  mat.data.foreach fn(e)
+    val b = mask<local<_>>{mask<div>{f(e)}}
+    if b then
+      res := Cons(e, res)
+  res
 
 // Create a `matrix<char>` from `text`, consisting of multiple lines.
 pub fun charlistlist/parse(text : string) : maybe<matrix<char>>
