@@ -1,11 +1,13 @@
 module matrix
 
+
 import help/lst
 import help/exit
 import help/util
 import help/maybe
 
 import indexed
+import vectorext
 
 // An index into a matrix
 pub value struct idx
@@ -30,8 +32,13 @@ pub fun int/idx(i : int, cols : int) : idx
 pub fun intpair/idx((i, j) : (int, int)) : idx
   Idx(i, j)
 
+pub fun into-indexer(mat : matrix<a>) : (int -> idx)
+  val cols = mat.cols
+  fn(i : int)
+    idx(i, cols)
 
-// An efficient 2d matrix built upon vectors.
+
+// An efficient 2d matrix backed by a vector.
 pub value struct matrix<a>
   rows : int
   cols : int
@@ -65,19 +72,35 @@ pub fun set(mat : matrix<a>, idx : idx, new : a) : _ matrix<a>
   mat(data = data)
 
 pub fun show(mat : matrix<a>, ?show : a -> e string) : e string
-  var total := ""
-  mat.foreach-indexed fn(idx, elem)
-    val str = mask<local<_>>{show(elem)}
-    match idx
-      Idx(_, w) | w == mat.cols - 1 ->
-        total := total ++ str ++ "\n"
-      Idx(_, _) ->
-        total := total ++ str
-  total
+  var repr := ""
+  val width = mat.cols - 1
+  val height = mat.rows - 1
+  mat.foreach-indexed fn(i, elem)
+    val showed = mask<local<_>> {show(elem)}
+    val add =
+      match i
+        Idx(0, 0) -> 
+          "[[" ++ showed
+        Idx(_, 0) ->
+          " [" ++ showed
+        Idx(r, c) | r == height && c == width ->
+          showed ++ "]]"
+        Idx(_, c) | c == width ->
+          showed ++ "],\n"
+        Idx(_, _) ->
+          showed ++ ", "
+    repr := repr ++ add
+  repr
 
 pub fun foreach-indexed(^mat : matrix<a>, ^f : (idx, a) -> _ ())
   mat.data.foreach-indexed fn(i, e)
     f(i.idx(mat.cols), e)
+
+pub fun foreach(^mat : matrix<a>, f : a -> e ()) : e ()
+  mat.data.foreach(f)
+
+pub fbip fun foldl(^mat : matrix<_>, s, ^f, i : int = 0)
+  mat.data.foldl(s, f, i)
   
 pub fun map-indexed(^mat : matrix<a>, ^f : (idx, a) -> e b) : e matrix<b>
   var flat-idx := 0
@@ -98,7 +121,7 @@ pub fun find-all(^mat : matrix<a>, ^f : a -> _ bool) : _ list<a>
   res
 
 // Create a `matrix<char>` from `text`, consisting of multiple lines.
-pub fun charlistlist/parse(text : string) : maybe<matrix<char>>
+pub fun charlistlist/charmatrix(text : string) : maybe<matrix<char>>
   text
   .lines
   .map(list)

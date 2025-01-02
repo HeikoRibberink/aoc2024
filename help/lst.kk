@@ -147,3 +147,27 @@ fun swap(xs : list<a>, i : int, j : int) : _ maybe<list<a>>
       .set(i, b)
       .set(j, a)
   .flatten
+
+fun categorize(l, max : int, ^categorizer : _ -> _ int)
+  var cats := vector(max, Nil)
+  fun help(xs)
+    match xs
+      Nil -> ()
+      Cons(x, xs) ->
+        val cat = mask<local<_>> {categorizer(x)}
+        val tail = cats.at(cat).expect("categorize to index between 0 and " ++ max.show)
+        cats[cat] := Cons(x, tail)
+        help(xs)
+  help(l)
+  cats
+        
+fun unique(xs : list<a>, s : list<a> = Nil, ?(==) : (a, a) -> bool) : list<a>
+  match xs
+    Nil -> s
+    Cons(x, xs) -> 
+      unique(xs,
+        if s.contains(x) then
+          s
+        else
+          Cons(x, s)
+      )
