@@ -4,6 +4,22 @@ import help/aoc
 import help/pair
 import help/util
 import lib/vectorext
+import lib/indexed
+
+fun line-indices(rows : int, cols : int, start : (int, int), step : (int, int)) : _ list<(int, int)>
+  // The numbers include the antennas, so we start at `start`
+  var cur := start
+  var l := Nil
+  while {
+    val (r, c) = cur  
+    r >= 0 && r < rows && c >= 0 && c < cols
+  } {
+    l := Cons(cur, l)
+    cur := cur + step
+  }
+  l
+    
+
 fun main()
   val text = aoc/input()
   val input = text.lines.map(list).filter([])
@@ -33,13 +49,12 @@ fun main()
     .filter fn((a : (int, int), b))
       a != b
     .map fn((a, b))
+      // Not very different from main1. Instead of taking only the two around
+      // it, we use line-indices to take a line from the two antennas.
       val diff = b - a
-      [
-        b + diff,
-        a - diff
-      ]
-      .filter fn((r, c))
-        r >= 0 && r < rows && c >= 0 && c < cols
+      val forward = line-indices(rows, cols, b, diff)
+      val backward = line-indices(rows, cols, a, ~diff)
+      forward.append(backward)
     .concat
   .list
   .concat

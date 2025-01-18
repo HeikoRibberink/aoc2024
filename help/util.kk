@@ -13,5 +13,13 @@ fun counter(s : int, action : () -> <counter|e> a) : e a
       i
   action()
 
-fun todo() : exn a
-  throw("TODO reached.")
+fun todo(?kk-file-line : string) : exn a
+  throw("TODO reached at " ++ kk-file-line)
+
+fun inline-print(x, ?show)
+  x.println
+  x
+  
+fun peep(x, action)
+  action(x)
+  x

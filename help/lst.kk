@@ -23,13 +23,13 @@ fun lst/partition(xs : list<a>, pred : a -> e bool, aux1 : list<a> = [], aux2 : 
     else 
       xs.lst/partition(pred, aux1, Cons(x, aux2))
 
-fun lst/qsort(xs : list<a>, ?(<) : (a, a) -> bool) : div list<a>
+fun lst/qsort(xs : list<a>, ^?(<) : (a, a) -> bool) : div list<a>
   match xs
     Nil -> Nil
     Cons(x, Nil) -> [x]
     Cons(x, xs) -> 
       val (l, r) = xs.lst/partition fn(y) y < x
-      l.qsort ++ [x] ++ r.qsort
+      l.qsort ++ Cons(x, r.qsort)
 
 fun lst/zip(xs, ys)
   match (xs, ys)
@@ -119,6 +119,27 @@ fbip fun contains(xs : list<a>, ex : a, ^?(==) : (a, a) -> bool) : bool
     Cons(_, xs) -> xs.contains(ex)
     _ -> False
 
+type insert-result<a>
+  Success(set : list<a>)
+  Failure(set : list<a>, elem : a)
+
+fip(1) fun insert-result/cons(res, e)
+  match res
+    Success(set) -> Success(Cons(e, set))
+    Failure(set, elem) -> Failure(Cons(e, set), elem)
+  
+
+fun insert-unique(xs : list<a>, elem : a, ^?cmp : (a, a) -> order) : insert-result<a>
+  match xs
+    Nil -> Success(Cons(elem, Nil))
+    Cons(current, tail) -> 
+      if current == elem then
+        Failure(Cons(current, tail), elem)
+      else
+        insert-unique(tail, elem).cons(current)
+          
+  
+
 fbip fun index-of(xs : list<a>, ^pred : a -> e bool, n : int = 0) : e maybe<int>
   match xs
     Nil -> Nothing
@@ -155,19 +176,39 @@ fun categorize(l, max : int, ^categorizer : _ -> _ int)
       Nil -> ()
       Cons(x, xs) ->
         val cat = mask<local<_>> {categorizer(x)}
-        val tail = cats.at(cat).expect("categorize to index between 0 and " ++ max.show)
+        val tail = cats
+          .at(cat)
+          .expect("categorize to index between 0 and " ++ max.show ++ " inclusive, but was " ++ cat.show)
         cats[cat] := Cons(x, tail)
         help(xs)
   help(l)
   cats
         
-fun unique(xs : list<a>, s : list<a> = Nil, ?(==) : (a, a) -> bool) : list<a>
+fun unique(xs : list<a>, ^?cmp : (a, a) -> order) : _ list<a>
   match xs
-    Nil -> s
-    Cons(x, xs) -> 
-      unique(xs,
-        if s.contains(x) then
-          s
-        else
-          Cons(x, s)
-      )
+    Nil -> Nil
+    Cons(x, xs) ->
+      val u = xs.unique()
+      match u.insert-unique(x)
+        Success(set) -> set
+        Failure(set, _) -> set
+
+// Calculates the cartesian product of `xs` and `ys`
+fun product(xs : list<a>, ys : list<b>) : list<(a, b)>
+  match xs
+    Nil -> Nil
+    Cons(x, xs) ->
+      val paired = ys.map fn(e)
+        (x, e)
+      paired ++ product(xs, ys)
+
+fun self/product(xs : list<a>) : list<(a, a)>
+  product(xs, xs)
+
+fun self/unique-pairs(xs : list<a>) : list<(a, a)>
+  match xs
+    Nil -> Nil
+    Cons(x, xs) ->
+      val paired = xs.map fn(e)
+        (x, e)
+      paired ++ unique-pairs(xs)

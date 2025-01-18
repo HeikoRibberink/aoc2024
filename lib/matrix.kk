@@ -99,7 +99,7 @@ pub fun foreach-indexed(^mat : matrix<a>, ^f : (idx, a) -> _ ())
 pub fun foreach(^mat : matrix<a>, f : a -> e ()) : e ()
   mat.data.foreach(f)
 
-pub fbip fun foldl(^mat : matrix<_>, s, ^f, i : int = 0)
+pub fun foldl(^mat : matrix<_>, s, ^f, i : int = 0)
   mat.data.foldl(s, f, i)
   
 pub fun map-indexed(^mat : matrix<a>, ^f : (idx, a) -> e b) : e matrix<b>
